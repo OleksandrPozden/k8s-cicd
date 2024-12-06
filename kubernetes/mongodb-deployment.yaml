@@ -38,22 +38,22 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: MONGODB_PASSWORD
-                  name: mongodb-secret
+                  name: mern-secret
             - name: MONGODB_USER
               valueFrom:
                 secretKeyRef:
                   key: MONGODB_USER
-                  name: mongodb-secret
+                  name: mern-secret
             - name: MONGO_INITDB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: MONGODB_PASSWORD
-                  name: mongodb-secret
+                  name: mern-secret
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
                 secretKeyRef:
                   key: MONGODB_USER
-                  name: mongodb-secret
+                  name: mern-secret
           image: mongo:latest
           name: mongodb-server
           ports:

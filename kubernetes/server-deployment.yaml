@@ -38,12 +38,27 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: MONGODB_PASSWORD
-                  name: mongodb-secret
+                  name: mern-secret
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   key: MONGODB_USER
-                  name: mongodb-secret
+                  name: mern-secret
+            - name: CLOUDINARY_CLOUD_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: CLOUDINARY_CLOUD_NAME
+                  name: mern-secret
+            - name: CLOUDINARY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: CLOUDINARY_API_KEY
+                  name: mern-secret
+            - name: CLOUDINARY_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: CLOUDINARY_API_SECRET
+                  name: mern-secret
           image: opozden/backend-mern:prod
           name: backend
           ports:
