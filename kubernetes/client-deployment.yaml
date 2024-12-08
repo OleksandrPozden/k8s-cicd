@@ -21,7 +21,7 @@ spec:
         io.kompose.service: client
     spec:
       containers:
-        - image: opozden/webui-mern:prod
+        - image: opozden/frontend-hw3
           name: frontend
           ports:
             - containerPort: 80

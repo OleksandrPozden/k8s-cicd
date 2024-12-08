@@ -32,7 +32,6 @@ const Home = () => {
     <div className="row center">
       {users?.map((user) => (
         <div className="card me-3 mt-2 p-0" key={user._id}>
-          <img src={user.avatar} alt="" width={"100%"} height={200} />
           <div className="p-4">
             <h4 className="text-center">{user.name}</h4>
             <div className="d-flex justify-content-between align-items-center">

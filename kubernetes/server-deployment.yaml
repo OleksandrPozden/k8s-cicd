@@ -59,7 +59,7 @@ spec:
                 secretKeyRef:
                   key: CLOUDINARY_API_SECRET
                   name: mern-secret
-          image: opozden/backend-mern:prod
+          image: opozden/backend-hw3
           name: backend
           ports:
             - containerPort: 5000
