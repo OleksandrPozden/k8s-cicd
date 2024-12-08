@@ -72,89 +72,90 @@ jobs:
         cache-from: type=local,src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache
 
-  # deploy: 
-  #   name: Deploy
-  #   runs-on: ubuntu-latest
-  #   needs: build
+  deploy: 
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
     
-  #   env:
-  #     PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  #     GKE_CLUSTER: autopilot-cluster-1
-  #     GKE_REGION: us-central1	
+    env:
+      PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+      GKE_CLUSTER: autopilot-cluster-1
+      GKE_REGION: us-central1	
 
-  #   steps:
-  #   - name: Check out code
-  #     uses: actions/checkout@v2
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
 
-  #   - name: Setup Kustomize
-  #     uses: imranismail/setup-kustomize@v1
-  #     with:
-  #       kustomize-version: "3.6.1"
+    - name: Setup Kustomize
+      uses: imranismail/setup-kustomize@v1
+      with:
+        kustomize-version: "3.6.1"
 
-  #   - name: Authenticate to Google Cloud
-  #     uses: 'google-github-actions/auth@v2'
-  #     with:
-  #       credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+    - name: Authenticate to Google Cloud
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-  #   - name: Set up Cloud SDK
-  #     uses: 'google-github-actions/setup-gcloud@v2'
-  #     with:
-  #       install_components: "gke-gcloud-auth-plugin"
+    - name: Set up Cloud SDK
+      uses: 'google-github-actions/setup-gcloud@v2'
+      with:
+        install_components: "gke-gcloud-auth-plugin"
 
-  #   - name: Get the GKE credentials so we can deploy to the cluster
-  #     run: |
-  #       gcloud container clusters get-credentials "$GKE_CLUSTER" --region "$GKE_REGION"
+    - name: Get the GKE credentials so we can deploy to the cluster
+      run: |
+        gcloud container clusters get-credentials "$GKE_CLUSTER" --region "$GKE_REGION"
 
-  #   - name: Create namespace & set in Kustomize
-  #     run: |
-  #        namespacePresentBlue=`kubectl get ns | grep mern-blue | wc -l`
-  #        namespacePresentGreen=`kubectl get ns | grep mern-green | wc -l`
-  #        if [ $namespacePresentBlue -eq 0 ]
-  #        then
-  #           kubectl create ns mern-blue
-  #           cd k8s
-  #           kustomize edit set namespace mern-blue
-  #           echo "NEW_NAMESPACE=mern-blue" >> $GITHUB_ENV
-  #           echo "OLD_NAMESPACE=mern-green" >> $GITHUB_ENV
-  #        elif [ $namespacePresentGreen -eq 0 ]
-  #        then
-  #           kubectl create ns mern-green
-  #           cd k8s
-  #           kustomize edit set namespace mern-green
-  #           echo "NEW_NAMESPACE=mern-green" >> $GITHUB_ENV
-  #           echo "OLD_NAMESPACE=mern-blue" >> $GITHUB_ENV
-  #        else
-  #           echo "Both Blue and Green namespaces are present! Exiting"
-  #           exit 1
-  #        fi
+    - name: Create namespace & set in Kustomize
+      run: |
+         namespacePresentBlue=`kubectl get ns | grep mern-blue | wc -l`
+         namespacePresentGreen=`kubectl get ns | grep mern-green | wc -l`
+         if [ $namespacePresentBlue -eq 0 ]
+         then
+            kubectl create ns mern-blue
+            cd kubernetes
+            kustomize edit set namespace mern-blue
+            echo "NEW_NAMESPACE=mern-blue" >> $GITHUB_ENV
+            echo "OLD_NAMESPACE=mern-green" >> $GITHUB_ENV
+         elif [ $namespacePresentGreen -eq 0 ]
+         then
+            kubectl create ns mern-green
+            cd kubernetes
+            kustomize edit set namespace mern-green
+            echo "NEW_NAMESPACE=mern-green" >> $GITHUB_ENV
+            echo "OLD_NAMESPACE=mern-blue" >> $GITHUB_ENV
+         else
+            echo "Both Blue and Green namespaces are present! Exiting"
+            exit 1
+         fi
 
-  #   - name: Update Kubernetes resources
-  #     env:
-  #       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  #     run: |
-  #      cd k8s
-  #      kustomize edit set image hello-gitops=$DOCKER_USERNAME/hello-gitops:$GITHUB_SHA
-  #      cat kustomization.yaml
+    - name: Update Kubernetes resources
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      run: |
+       cd kubernetes
+       kustomize edit set image frontend-hw3=$DOCKER_USERNAME/frontend-hw3:$GITHUB_SHA
+       kustomize edit set image backend-hw3=$DOCKER_USERNAME/backend-hw3:$GITHUB_SHA
+       cat kustomization.yaml
     
-  #   - name: Deploy updated Kubernetes resources
-  #     run: |
-  #       kubectl apply -k k8s/ 
+    - name: Deploy updated Kubernetes resources
+      run: |
+        kubectl apply -k kubernetes/ 
    
-  #   - name: Remove old namespace
-  #     run: |
-  #       namespacePresentOld=`kubectl get ns | grep ${{ env.OLD_NAMESPACE }} | wc -l`
-  #       if [ $namespacePresentOld -eq 1 ]
-  #       then
-  #         kubectl delete ns ${{ env.OLD_NAMESPACE }} --wait=true
-  #       fi
+    - name: Remove old namespace
+      run: |
+        namespacePresentOld=`kubectl get ns | grep ${{ env.OLD_NAMESPACE }} | wc -l`
+        if [ $namespacePresentOld -eq 1 ]
+        then
+          kubectl delete ns ${{ env.OLD_NAMESPACE }} --wait=true
+        fi
  
-  #   - name: Commit files
-  #     run: |
-  #       git config --local user.email "action@github.com"
-  #       git config --local user.name "GitHub Action"
-  #       git commit -am "Bump docker tag"
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -am "Bump docker tag"
         
-  #   - name: Push changes
-  #     uses: ad-m/github-push-action@master
-  #     with:
-  #       github_token: ${{ secrets.GITHUB_TOKEN }} 
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }} 

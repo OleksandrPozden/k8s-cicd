@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- client-deployment.yaml
+- server-deployment.yaml
+- mongodb-deployment.yaml
+- client-service.yaml
+- server-service.yaml
+- mongodb-service.yaml
+- env-configmap.yaml
+namespace: mern-blue
+images:
+- name: frontend-hw3
+  newName: opozden/frontend-hw3
+  newTag: 613671f52bd780551bd762c89eed3e1660cf6c00
+- name: backend-hw3
+  newName: opozden/backend-hw3
+  newTag: 613671f52bd780551bd762c89eed3e1660cf6c00
