@@ -8,11 +8,11 @@ resources:
 - server-service.yaml
 - mongodb-service.yaml
 - env-configmap.yaml
-namespace: mern-blue
+namespace: mern-green
 images:
-- name: frontend-hw3
-  newName: opozden/frontend-hw3
-  newTag: 613671f52bd780551bd762c89eed3e1660cf6c00
 - name: backend-hw3
   newName: opozden/backend-hw3
-  newTag: 613671f52bd780551bd762c89eed3e1660cf6c00
+  newTag: 339c7145294459a86a33423fb076e2b68becf53f
+- name: frontend-hw3
+  newName: opozden/frontend-hw3
+  newTag: 339c7145294459a86a33423fb076e2b68becf53f
