@@ -128,7 +128,7 @@ jobs:
          elif [ $namespacePresentGreen -eq 0 ]
          then
             kubectl create ns mern-green
-            kubectl create secret generic mern-secret \ 
+            kubectl create secret generic mern-secret \
               --from-literal CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} \
               --from-literal CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
               --from-literal CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
