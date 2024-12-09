@@ -71,7 +71,4 @@ spec:
             limits:
               cpu: "1"
               memory: "1Gi"
-          ports:
-            - name: http
-              containerPort: 8050
       restartPolicy: Always
