@@ -118,6 +118,8 @@ jobs:
          then
             kubectl create ns mern-blue
             kubectl create secret generic mern-secret \
+              --from-literal MONGODB_USER=${{ secrets.MONGODB_USER}} \
+              --from-literal MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD}} \
               --from-literal CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} \
               --from-literal CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
               --from-literal CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
@@ -130,6 +132,8 @@ jobs:
          then
             kubectl create ns mern-green
             kubectl create secret generic mern-secret \
+              --from-literal MONGODB_USER=${{ secrets.MONGODB_USER}} \
+              --from-literal MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD}} \
               --from-literal CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} \
               --from-literal CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
               --from-literal CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
